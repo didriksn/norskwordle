@@ -18,8 +18,11 @@
     // Delay the reset to flip back
     setTimeout(() => {
       isFlipped = false;
-    }, 1000); // Adjust this delay as needed
+    }, 5000); // Adjust this delay as needed
   }
+
+
+
 
   function compareWords() {
     const trimmedWord1 = word.trim().toUpperCase();
@@ -100,7 +103,7 @@
           <div
             class:correct={isCorrect && correctRow.includes(rowIndex)}
             class="box {rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length ? 'filled' : ''} {isFlipped && rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length ? 'flipping' : ''}" 
-            style="background-color: {rowLetterColors[rowIndex][boxIndex]}; border-color: {rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length ? rowLetterColors[rowIndex][boxIndex] : '#d3d6da'}; color: {rowLetterColors[rowIndex][boxIndex] !== '' ? 'white' : 'black'};"
+            style="transition-delay: 500ms; transition-property: background-color, border; background-color: {rowLetterColors[rowIndex][boxIndex]}; border-color: {rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length ? rowLetterColors[rowIndex][boxIndex] : '#d3d6da'}; color: {rowLetterColors[rowIndex][boxIndex] !== '' ? 'white' : 'black'};"
           >
             {#if rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length}
               {rowTexts[rowIndex][boxIndex].toUpperCase()}
@@ -112,4 +115,4 @@
       </div>
     {/each}
   </div>
-</div>
+</div> 
