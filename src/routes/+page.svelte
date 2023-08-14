@@ -10,13 +10,21 @@
   /* HA NOE SOM KOMMER OPP OM ORDET MAN GJETTER IKKE ER I ORDLISTEN */
   /* RYDDE OPP I KODEN (OM DU LESER DETTE SÅ VET JEG AT KODEN KAN OPTIMALISERES MEN JEG HAR IKKE GIDDET Å GJØRE DET ENDA) */
 
+  import random from "random"
+  import seedrandom from "seedrandom"
 
   // let set = new Set(words);
   let word = ""; 
   let numRows = 6; 
   let placeholder = "";
   let currentRow = 0;
-  let correctWord = "VINNE";
+  // let correctWord = "VINNE";
+ 
+  let day = Math.round(Date.now()/1000/60/60/24)
+  random.use(seedrandom(day))
+  const correctWordIdx = random.int(0, words.length - 1)
+  let correctWord = words[correctWordIdx]
+
   let rowTexts = Array.from({ length: numRows }, () => "");
   let isCorrect = false;
   let correctRow = [];
