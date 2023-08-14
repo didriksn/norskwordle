@@ -105,15 +105,7 @@ console.log(charCountObject);
       } 
     }
     
-
-    isCorrect = true; 
-
-    for (let i = 0; i < trimmedWord1.length; i++) {
-      if (trimmedWord1[i] !== trimmedWord2[i]) {
-        isCorrect = false;
-        break; 
-      }
-    }
+    isCorrect = trimmedWord1 === trimmedWord2;
 
     if (isCorrect) {
       correctRow.push(currentRow);
@@ -125,6 +117,10 @@ console.log(charCountObject);
 
   window.addEventListener('keydown', event => {
     if (keyboardBlocked) {
+      return;
+    }
+
+    if (isCorrect) {
       return;
     }
 
