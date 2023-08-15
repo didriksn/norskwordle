@@ -137,7 +137,7 @@
 </script>
 
 <div class="header">
-  <h1 class="title">NORSK WORDLE</h1>
+  <h1 class="title">Norsk Wordle</h1>
 </div>
 
 <div class="center">
