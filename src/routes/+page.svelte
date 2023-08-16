@@ -175,6 +175,17 @@
       rowTexts[currentRow] = word;
     }
   }
+
+
+
+  let wordArr = word.split("");
+
+  
+
+
+  const firstRowLetters = ["Q","W","E","R","T","Y","U","I","O","P","Å"];
+  const secondRowLetters = ["A","S","D","F","G","H","I","J","K","L","Ø","Æ"];
+  const thirdRowLetters = ["Z", "X", "C", "V", "B", "N", "M"]; // ikke enter og backspace siden de er litt annerledes
 </script>
 
 <div class="header">
@@ -203,8 +214,31 @@
   </div>
 </div> 
 
+<div id="keyboard-cont">
+  <div class="first-row">
+    {#each firstRowLetters as lett}
+      <button class="keyboard-button" style="background-color: {}" on:click={() => handleButtonClick({lett})}>{lett}</button>
+    {/each}
+  </div>
 
-<div id="keyboard-cont" on:keydown={handleButtonClick}>
+  <div class="second-row">
+    {#each secondRowLetters as lett}
+      <button class="keyboard-button" on:click={() => handleButtonClick({lett})}>{lett}</button>
+    {/each}
+  </div>
+
+  <div class="third-row">
+    <button class="keyboard-button enter" on:click={() => handleButtonClick("Enter")}>Enter</button>
+    {#each thirdRowLetters as lett}
+      <button class="keyboard-button" on:click={() => handleButtonClick({lett})}>{lett}</button>
+    {/each}
+    <button class="keyboard-button enter" on:click={() => handleButtonClick('Backspace')}><svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></svg></button>
+  </div>
+</div>
+
+
+
+<!-- <div id="keyboard-cont">
   <div class="first-row">
       <button class="keyboard-button" on:click={() => handleButtonClick('q')}>q</button>
       <button class="keyboard-button" on:click={() => handleButtonClick('w')}>w</button>
@@ -242,4 +276,4 @@
       <button class="keyboard-button" on:click={() => handleButtonClick('m')}>m</button>
       <button class="keyboard-button enter" on:click={() => handleButtonClick('Backspace')}><svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></svg></button>
   </div>
-</div>
+</div> -->
