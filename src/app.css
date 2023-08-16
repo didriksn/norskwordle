@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@800&display=swap');
 
 .header {
-  border-bottom: 2px solid rgba(128,128,128,0.4);
+  border-bottom: 1px solid #d3d6da;
 }
 
 .title {
@@ -14,6 +14,9 @@
   /* font-family: 'Abril Fatface', cursive; */
   font-family: 'Noto Serif', serif;
   /* font-family: 'Times New Roman', Times, serif; */
+  font-size: 1.75rem;
+  margin-bottom: 12px;
+  margin-top: 8px;
 }
 
 .grid {

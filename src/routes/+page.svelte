@@ -180,7 +180,7 @@
 
   let wordArr = word.split("");
 
-  
+
 
 
   const firstRowLetters = ["Q","W","E","R","T","Y","U","I","O","P","Å"];
@@ -217,7 +217,7 @@
 <div id="keyboard-cont">
   <div class="first-row">
     {#each firstRowLetters as lett}
-      <button class="keyboard-button" style="background-color: {}" on:click={() => handleButtonClick({lett})}>{lett}</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick({lett})}>{lett}</button>
     {/each}
   </div>
 
