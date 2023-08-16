@@ -143,6 +143,38 @@
       }, offsetDelay); 
     }
   });
+
+
+
+  function handleButtonClick(letter) {
+    if (keyboardBlocked) {
+      return;
+    }
+
+    if (isCorrect) {
+      return;
+    }
+
+    if (letter === 'Backspace') {
+      word = word.slice(0, -1);
+      rowTexts[currentRow] = word;
+    } else if (letter === 'Enter' && word.length == 5 && Array.from(words).includes(word)) {
+      flipLetters();
+      compareWords();
+      keyboardBlocked = true;
+      setTimeout(() => {
+        keyboardBlocked = false;
+        currentRow += 1;
+        // currentRow > 6 ?
+        word = rowTexts[currentRow] || "";
+      }, offsetDelay); 
+    } 
+    
+    if (/^[a-æøåA-ÆØÅ]+$/.test(letter) && letter.length === 1) {
+      word += letter.toUpperCase();
+      rowTexts[currentRow] = word;
+    }
+  }
 </script>
 
 <div class="header">
@@ -170,3 +202,44 @@
     {/each}
   </div>
 </div> 
+
+
+<div id="keyboard-cont" on:keydown={handleButtonClick}>
+  <div class="first-row">
+      <button class="keyboard-button" on:click={() => handleButtonClick('q')}>q</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('w')}>w</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('e')}>e</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('r')}>r</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('t')}>t</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('y')}>y</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('u')}>u</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('i')}>i</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('o')}>o</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('p')}>p</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('å')}>å</button>
+  </div>
+  <div class="second-row">
+      <button class="keyboard-button" on:click={() => handleButtonClick('a')}>a</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('s')}>s</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('d')}>d</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('f')}>f</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('g')}>g</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('h')}>h</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('j')}>j</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('k')}>k</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('l')}>l</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('ø')}>ø</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('æ')}>æ</button>
+  </div>
+  <div class="third-row">
+      <button class="keyboard-button enter" on:click={() => handleButtonClick('Enter')}>Enter</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('z')}>z</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('x')}>x</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('c')}>c</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('v')}>v</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('b')}>b</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('n')}>n</button>
+      <button class="keyboard-button" on:click={() => handleButtonClick('m')}>m</button>
+      <button class="keyboard-button enter" on:click={() => handleButtonClick('Backspace')}><svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></svg></button>
+  </div>
+</div>
