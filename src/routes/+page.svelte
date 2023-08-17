@@ -10,7 +10,6 @@
   HA NOE SOM KOMMER OPP NÅR MAN VINNER ELLER TAPER 
   HA NOE SOM KOMMER OPP OM ORDET MAN GJETTER IKKE ER I ORDLISTEN 
   RYDDE OPP I KODEN (FIKSE HTML INLINE CSS TIL Å VÆRE CLASSES MED CONDITIONS ISTEDET)
-  TASTATUR UNDER SPILLEBRETTET (FARGE PÅ BOKSTAVENE I TASTATURET)
   INSTRUKSJONER PÅ HVORDAN MAN SPILLER SPILLET (POPUP/SPØRSMÅLSTEGN I TOPPEN AV HJØRNET)
   KOMPATIBILITET FOR SÅNN BLINDE FOLK OG SÅNT (SÅNN DERE TTS GREIE SOM BLINDE FOLK HAR KOMPATIBILITET)
   NÅR MAN SKRIVER EN BOKSTAV SÅ POPPER BOKSTAVEN FRAM I SÅNN ET HALVT SEKUND (SJEKK VANLIG WORDLE NETTSIDEN)(POPPEEFFEKT SKAL IKKE SKJE NÅR MAN BACKSPACER BTW)
@@ -28,12 +27,41 @@
   let numRows = 6; 
   let placeholder = "";
   let currentRow = 0;
-  // let correctWord = "VINNE";
+  let wordObj = {
+  A: "#d3d6da",
+  B: "#d3d6da",
+  C: "#d3d6da",
+  D: "#d3d6da",
+  E: "#d3d6da",
+  F: "#d3d6da",
+  G: "#d3d6da",
+  H: "#d3d6da",
+  I: "#d3d6da",
+  J: "#d3d6da",
+  K: "#d3d6da",
+  L: "#d3d6da",
+  M: "#d3d6da",
+  N: "#d3d6da",
+  O: "#d3d6da",
+  P: "#d3d6da",
+  Q: "#d3d6da",
+  R: "#d3d6da",
+  S: "#d3d6da",
+  T: "#d3d6da",
+  U: "#d3d6da",
+  V: "#d3d6da",
+  W: "#d3d6da",
+  X: "#d3d6da",
+  Y: "#d3d6da",
+  Z: "#d3d6da",
+  Æ: "#d3d6da",
+  Ø: "#d3d6da",
+  Å: "#d3d6da"
+};
  
   let currentDate = new Date();
   let cestDate = new Date(currentDate.getTime() + 2 * 60 * 60 * 1000);
   let day = Math.ceil(cestDate.getTime() / (1000 * 60 * 60 * 24));
-  console.log(day)
   random.use(seedrandom(day))
   const correctWordIdx = random.int(0, betterWords.length - 1);
   let correctWord = betterWords[correctWordIdx]
@@ -61,6 +89,7 @@
 
   let animDelay = false;
 
+
   function compareWords() {
     animDelay = true;
 
@@ -77,12 +106,13 @@
     let grin = [];
     let yello = [];
 
+
+
     const count = {};
     
     for (let i = 0; i < trimmedWord1.length; i++) {
      count[trimmedWord2[i]] = (count[trimmedWord2[i]] || 0) + 1;
     }
-    console.log(grin)
 
 
     for (let i = 0; i < trimmedWord1.length; i++) {
@@ -90,6 +120,7 @@
         grin.push(trimmedWord1[i])
         rowLetterColors[currentRow][i] = '#6AAA64';
         count[trimmedWord1[i]]--;
+        wordObj[trimmedWord1[i]] = '#6AAA64'
       } 
     }
     
@@ -99,12 +130,21 @@
         yello.push(trimmedWord1[i]) 
         rowLetterColors[currentRow][i] = '#C9B458';
         count[trimmedWord1[i]]--; 
+        wordObj[trimmedWord1[i]] = '#C9B458'
       } else if (trimmedWord1[i] !== trimmedWord2[i] && count[trimmedWord1[i]] > 0 && !yello.includes(trimmedWord1[i])) {
         yello.push(trimmedWord1[i]) 
         rowLetterColors[currentRow][i] = '#C9B458';
+        wordObj[trimmedWord1[i]] = '#C9B458'
+      } 
+    }
+
+    for (let i = 0; i < trimmedWord1.length; i++) {
+      if(!trimmedWord2.includes(trimmedWord1[i])) {
+        wordObj[trimmedWord1[i]] = '#787c7e'
       }
     }
 
+    console.log(wordObj)
 
     isCorrect = trimmedWord1 === trimmedWord2;
 
@@ -178,13 +218,15 @@
 
 
 
-  let wordArr = word.split("");
+
+
+
 
 
 
 
   const firstRowLetters = ["Q","W","E","R","T","Y","U","I","O","P","Å"];
-  const secondRowLetters = ["A","S","D","F","G","H","I","J","K","L","Ø","Æ"];
+  const secondRowLetters = ["A","S","D","F","G","H","J","K","L","Ø","Æ"];
   const thirdRowLetters = ["Z", "X", "C", "V", "B", "N", "M"]; // ikke enter og backspace siden de er litt annerledes
 </script>
 
@@ -217,63 +259,21 @@
 <div id="keyboard-cont">
   <div class="first-row">
     {#each firstRowLetters as lett}
-      <button class="keyboard-button" on:click={() => handleButtonClick({lett})}>{lett}</button>
+      <button class="keyboard-button" style="background-color:{wordObj[lett] == '#6AAA64' ? '#6AAA64' : wordObj[lett]}; transition-delay: {offsetDelay}ms; transition-property: color, background-color; color: {wordObj[lett] !== '#d3d6da' ? 'white' : 'black'};" on:click={() => handleButtonClick({lett})}>{lett}</button>
     {/each}
   </div>
 
   <div class="second-row">
     {#each secondRowLetters as lett}
-      <button class="keyboard-button" on:click={() => handleButtonClick({lett})}>{lett}</button>
+      <button class="keyboard-button" style="background-color:{wordObj[lett] == '#6AAA64' ? '#6AAA64' : wordObj[lett]}; transition-delay: {offsetDelay}ms; transition-property: color, background-color; color: {wordObj[lett] !== '#d3d6da' ? 'white' : 'black'};" on:click={() => handleButtonClick({lett})}>{lett}</button>
     {/each}
   </div>
 
   <div class="third-row">
     <button class="keyboard-button enter" on:click={() => handleButtonClick("Enter")}>Enter</button>
     {#each thirdRowLetters as lett}
-      <button class="keyboard-button" on:click={() => handleButtonClick({lett})}>{lett}</button>
+      <button class="keyboard-button" style="background-color:{wordObj[lett] == '#6AAA64' ? '#6AAA64' : wordObj[lett]}; transition-delay: {offsetDelay}ms; transition-property: color, background-color; color: {wordObj[lett] !== '#d3d6da' ? 'white' : 'black'};" on:click={() => handleButtonClick({lett})}>{lett}</button>
     {/each}
     <button class="keyboard-button enter" on:click={() => handleButtonClick('Backspace')}><svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></svg></button>
   </div>
 </div>
-
-
-
-<!-- <div id="keyboard-cont">
-  <div class="first-row">
-      <button class="keyboard-button" on:click={() => handleButtonClick('q')}>q</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('w')}>w</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('e')}>e</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('r')}>r</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('t')}>t</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('y')}>y</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('u')}>u</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('i')}>i</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('o')}>o</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('p')}>p</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('å')}>å</button>
-  </div>
-  <div class="second-row">
-      <button class="keyboard-button" on:click={() => handleButtonClick('a')}>a</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('s')}>s</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('d')}>d</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('f')}>f</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('g')}>g</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('h')}>h</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('j')}>j</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('k')}>k</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('l')}>l</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('ø')}>ø</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('æ')}>æ</button>
-  </div>
-  <div class="third-row">
-      <button class="keyboard-button enter" on:click={() => handleButtonClick('Enter')}>Enter</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('z')}>z</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('x')}>x</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('c')}>c</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('v')}>v</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('b')}>b</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('n')}>n</button>
-      <button class="keyboard-button" on:click={() => handleButtonClick('m')}>m</button>
-      <button class="keyboard-button enter" on:click={() => handleButtonClick('Backspace')}><svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></svg></button>
-  </div>
-</div> -->
