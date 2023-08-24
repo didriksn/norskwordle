@@ -5,7 +5,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@800&display=swap');
 
 .header {
+  position: relative;
   border-bottom: 1px solid #d3d6da;
+  width: 100vw;
+  background-color: white;
+  z-index: 5;
+  margin-top: 0;
 }
 
 .title {
@@ -15,8 +20,10 @@
   font-family: 'Noto Serif', serif;
   /* font-family: 'Times New Roman', Times, serif; */
   font-size: 1.75rem;
-  margin-bottom: 12px;
-  margin-top: 8px;
+  margin-bottom: 5px;
+  margin-top: 0;
+
+
 }
 
 .grid {
@@ -79,12 +86,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  column-gap: 6px;
   font-family: 'Libre Franklin', sans-serif;
   height: 200px;
   margin: 0 8px;
   user-select: none;
   flex: .5;
   touch-action: manipulation;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #keyboard-cont div {
@@ -107,8 +117,8 @@
   background-color: #d3d6da;
   color: #000000;
   height: 58px;
-  width: 5vmin;
-  /* width: 43.594px; */
+  /* width: 5vmin; */
+  width: 43.594px;
   min-width: 20px;
   cursor: pointer;
   user-select: none;
@@ -125,12 +135,28 @@
 
 }
 
+
+.last {
+  margin-right: 0;
+}
+
+
 @media only screen and (max-width: 500px) {
   @media only screen and (max-height: 800px ) {
     .box {
       width: 12vmin;
       height: 12vmin;
     }
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  .keyboard-button {
+    width: 7.5vmin;
+  }
+
+  .enter {
+    width: 11.25vmin;
   }
 }
 
