@@ -8,19 +8,21 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
   /* MÅ GJØRES (PIL NED)
 
   HA NOE SOM KOMMER OPP NÅR MAN VINNER ELLER TAPER 
-  HA NOE SOM KOMMER OPP OM ORDET MAN GJETTER IKKE ER I ORDLISTEN 
   RYDDE OPP I KODEN (FIKSE HTML INLINE CSS TIL Å VÆRE CLASSES MED CONDITIONS ISTEDET)
   INSTRUKSJONER PÅ HVORDAN MAN SPILLER SPILLET (POPUP/SPØRSMÅLSTEGN I TOPPEN AV HJØRNET)
   KOMPATIBILITET FOR SÅNN BLINDE FOLK OG SÅNT (SÅNN DERE TTS GREIE SOM BLINDE FOLK HAR KOMPATIBILITET)
   NÅR MAN SKRIVER EN BOKSTAV SÅ POPPER BOKSTAVEN FRAM I SÅNN ET HALVT SEKUND (SJEKK VANLIG WORDLE NETTSIDEN)(POPPEEFFEKT SKAL IKKE SKJE NÅR MAN BACKSPACER BTW)
   STATISTIKKER??????
-  
+  LITEN FEIRING OM MAN KLARER ORDET
+  GJØRE SÅNN AT NETTSIDEN HUSKER OM DU HAR LØST DAGENS ORD, SÅNN AT OM DU REFRESHER SIDEN SÅ ER ALLE GJETTENE DINE FORTSATT DER
+  POPUP PÅ TOPPEN FOR OM MAN GJETTER ET ORD SOM IKKE ER I ORDLISTEN, OM MAN GJETTER ET ORD SOM IKKE ER LANGT NOK ELLER OM MAN IKKE KLARER SELVE WORDLEN SÅ STÅR DET ORDET
+  LITEN ANIMASJON OM MAN GJØR ET "INVALID GUESS" (EN SLAGS RISTE ANIMASJON)
+  EMOJIS SOM MAN KAN KOPIERE OG LIME INN ANDRE STEDER FOR Å SENDE FOLK HVORDAN DET GIKK MED DIN DAGENS WORDLE
+
+
   */
   
   
-
-  import random from "random"
-  import seedrandom from "seedrandom"
 
   // let set = new Set(words);
   let word = ""; 
@@ -58,19 +60,11 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
   Ø: "#d3d6da",
   Å: "#d3d6da"
 };
- 
-  let currentDate = new Date();
-  let cestDate = new Date(currentDate.getTime() + 2 * 60 * 60 * 1000);
 
-  const offsetFromDate = new Date(Date.UTC(2023, 7, 17, 0, 0, 0, 0) + (2 * 60 * 60 * 1000));
+  const offsetFromDate = new Date(Date.UTC(2023, 6, 27, 0, 0, 0, 0) + (2 + 60 * 60 * 1000));
   const msOffset = Date.now() - offsetFromDate;
   const dayOffset = msOffset / 1000 / 60 / 60 / 24;
   let correctWord = betterWords[Math.floor(dayOffset)]
-
-
-  let day = Math.floor(cestDate.getTime() / (1000 * 60 * 60 * 24));
-  random.use(seedrandom(day))
-  const correctWordIdx = random.int(0, betterWords.length - 1);
 
   let rowTexts = Array.from({ length: numRows }, () => "");
   let isCorrect = false;
@@ -89,7 +83,6 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
       isFlipped = false;
     }, offsetDelay); 
   }
-
 
 
 
@@ -243,6 +236,8 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
 <div class="header">
   <h1 class="title">Norsk Wordle</h1>
 </div>
+
+
 
 <div class="center">
   <div class="grid">
