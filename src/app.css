@@ -11,7 +11,7 @@
   width: 100vw;
   background-color: white;
   z-index: 5;
-  /* margin-top: 0; */
+  margin-top: 0;
   height: 57px;
   text-align: center;
 }
@@ -23,8 +23,8 @@
   /* font-family: 'Noto Serif', serif; */
   /* font-family: 'Times New Roman', Times, serif; */
   font-size: 1.75rem;
-  margin-top: 7px;
-
+  padding-top: 5px;
+  margin-top: 0;
 }
 
 .game-board {
@@ -36,6 +36,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  margin-top: 40px;
 }
 
 
@@ -43,6 +44,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 40px;
 }
 
 .row {
@@ -52,7 +54,7 @@
 
 .box {
   width: 60px;
-  height: 60.5px;
+  height: 60px;
   border: 2px solid;
   display: flex;
   align-items: center;
@@ -281,12 +283,10 @@
 }
 
 
-@media only screen and (max-width: 500px) {
-  @media only screen and (max-height: 800px ) {
-    .box {
-      width: 12vmin;
-      height: 12vmin;
-    }
+@media only screen and (max-height: 895px ) {
+  .box {
+    height: 6.7vh;
+    width: 6.7vh;
   }
 }
 
