@@ -7,19 +7,32 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
   
   /* MÅ GJØRES (PIL NED)
 
+  ORD SOM FEIRER MED DEG
+  FIKS DET DER MED AT ALLE "TOASTENE" (LILLE POPUPSENE PÅ TOPPEN AV SKJERMEN) BLIR FJERNET SAMTIDIG SOM DEN FØRSTE OM DET ER FLERE (DEN SKAL IKKE GJØRE DET ALTSÅ )
+  POPUP PÅ TOPPEN FOR OM MAN IKKE KLARER SELVE WORDLEN SÅ STÅR DET ORDET
+  NÅR MAN SKRIVER EN BOKSTAV SÅ POPPER BOKSTAVEN FRAM I SÅNN ET HALVT SEKUND (SJEKK VANLIG WORDLE NETTSIDEN)(POPPEEFFEKT SKAL IKKE SKJE NÅR MAN BACKSPACER BTW)
   HA NOE SOM KOMMER OPP NÅR MAN VINNER ELLER TAPER 
-  RYDDE OPP I KODEN (FIKSE HTML INLINE CSS TIL Å VÆRE CLASSES MED CONDITIONS ISTEDET)
   INSTRUKSJONER PÅ HVORDAN MAN SPILLER SPILLET (POPUP/SPØRSMÅLSTEGN I TOPPEN AV HJØRNET)
   KOMPATIBILITET FOR SÅNN BLINDE FOLK OG SÅNT (SÅNN DERE TTS GREIE SOM BLINDE FOLK HAR KOMPATIBILITET)
-  NÅR MAN SKRIVER EN BOKSTAV SÅ POPPER BOKSTAVEN FRAM I SÅNN ET HALVT SEKUND (SJEKK VANLIG WORDLE NETTSIDEN)(POPPEEFFEKT SKAL IKKE SKJE NÅR MAN BACKSPACER BTW)
-  STATISTIKKER??????
-  LITEN FEIRING OM MAN KLARER ORDET
   GJØRE SÅNN AT NETTSIDEN HUSKER OM DU HAR LØST DAGENS ORD, SÅNN AT OM DU REFRESHER SIDEN SÅ ER ALLE GJETTENE DINE FORTSATT DER
-  POPUP PÅ TOPPEN FOR OM MAN GJETTER ET ORD SOM IKKE ER I ORDLISTEN, OM MAN GJETTER ET ORD SOM IKKE ER LANGT NOK ELLER OM MAN IKKE KLARER SELVE WORDLEN SÅ STÅR DET ORDET
-  LITEN ANIMASJON OM MAN GJØR ET "INVALID GUESS" (EN SLAGS RISTE ANIMASJON)
+  STATISTIKKER??????
   EMOJIS SOM MAN KAN KOPIERE OG LIME INN ANDRE STEDER FOR Å SENDE FOLK HVORDAN DET GIKK MED DIN DAGENS WORDLE
 
 
+
+  RYDDE OPP I KODEN (FIKSE HTML INLINE CSS TIL Å VÆRE CLASSES MED CONDITIONS ISTEDET)
+  */
+
+
+
+  /* LISTE OVER ORD SOM SKAL KOMME OPP BASERT PÅ HVOR MANGE FORSØK MAN BRUKTE
+  1 = Geni (Genius)
+  2 = Storslått (Magnificent)
+  3 = Imponerende (Impressive)
+  4 = Fantastisk (Splendid)
+  5 = Flott (Great) 
+  6 = Puh (Phew)
+  >6 = selve ordet
   */
   
   
@@ -68,6 +81,7 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
 
   let rowTexts = Array.from({ length: numRows }, () => "");
   let isCorrect = false;
+  let nowQuestionMark = false;
   let correctRow = [];
   const delay = 5000; // animation-duration * 5
   const offsetDelay = delay - 2000;
@@ -84,6 +98,15 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
     }, offsetDelay); 
   }
 
+  let fail = false;
+
+  function testFailure() {
+    if (fail) return;
+    fail = true;
+    setTimeout(() => {
+      fail = false;
+    }, 600);
+  }
 
 
   let animDelay = false;
@@ -153,14 +176,27 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
 
     if (isCorrect) {
       correctRow.push(currentRow);
+
+      setTimeout(() => {
+        nowQuestionMark = true;
+      }, offsetDelay)
+
+      setTimeout(() => {
+        nowQuestionMark = false;
+      }, offsetDelay * 3)
     }
   }
+
 
 
   let keyboardBlocked = false;
 
   window.addEventListener('keydown', event => {
     if (keyboardBlocked) {
+      return;
+    }
+
+    if (currentRow > 5) {
       return;
     }
 
@@ -184,6 +220,10 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
         // currentRow > 6 ?
         word = rowTexts[currentRow] || "";
       }, offsetDelay); 
+    } else if (event.key === "Enter") {
+      testFailure()
+      if (word.length !== 5) addDiv("Ikke nok bokstaver");
+      else if (!Array.from(words).includes(word)) addDiv("Ikke i ordlisten");
     }
   });
 
@@ -191,6 +231,10 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
 
   function handleButtonClick(letter) {
     if (keyboardBlocked) {
+      return;
+    }
+
+    if (currentRow > 5) {
       return;
     }
 
@@ -211,7 +255,11 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
         // currentRow > 6 ?
         word = rowTexts[currentRow] || "";
       }, offsetDelay); 
-    } 
+    } else if (letter === "Enter") {
+      testFailure();
+      if (word.length !== 5) addDiv("Ikke nok bokstaver");
+      else if (!Array.from(words).includes(word)) addDiv("Ikke i ordlisten");
+    }
     
     if (/^[a-æøåA-ÆØÅ]+$/.test(letter) && letter.length === 1 && word.length < 5) {
       word += letter.toUpperCase();
@@ -223,7 +271,14 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
 
 
 
-
+  const happyWords = {
+    0: "Geni",
+    1: "Storslått",
+    2: "Imponerende",
+    3: "Fantastisk",
+    4: "Flott",
+    5: "Puh"
+  }
 
 
 
@@ -231,23 +286,53 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
   const firstRowLetters = ["Q","W","E","R","T","Y","U","I","O","P","Å"];
   const secondRowLetters = ["A","S","D","F","G","H","J","K","L","Ø","Æ"];
   const thirdRowLetters = ["Z", "X", "C", "V", "B", "N", "M"]; // ikke enter og backspace siden de er litt annerledes
+
+
+
+
+
+  let divs = [];
+
+  function addDiv(newDiv) {
+    divs = [...divs, newDiv];
+
+    setTimeout(() => {
+      divs = divs.filter(div => div !== newDiv);
+    }, 1500);
+  }
 </script>
+
 
 <div class="header">
   <h1 class="title">Norsk Wordle</h1>
 </div>
 
+<div class="game-board">
+  
+  <div class="toastContainer">
+    {#each divs as div}
+      {#if !isCorrect && currentRow < 6}
+        <div class="toast">{div}</div> 
+      {/if}
+      {/each}
 
+      {#if !isCorrect && currentRow > 5}
+        <div class="toast-noanim">{correctWord}</div>
+      {/if}
 
-<div class="center">
+      {#if isCorrect && currentRow < 6 && nowQuestionMark}
+        <div class="toast-othanim">{happyWords[currentRow - 1]}</div>
+      {/if}
+  </div>
+
   <div class="grid">
     {#each Array.from({ length: numRows }) as _, rowIndex}
-      <div class="row">
+      <div class="row {fail && rowIndex == currentRow ? "isWrong" : ""}">
         {#each Array.from({ length: 5 }) as _, boxIndex}
           <div
             class:correct={isCorrect && correctRow.includes(rowIndex)}
-            class="box {rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length ? 'filled' : ''} {isFlipped && rowTexts[rowIndex] && rowIndex == currentRow && boxIndex < rowTexts[rowIndex].length ? 'flipping' : ''}" 
-            style="transition-delay: {animDelay ? (boxIndex * (delay / 10) + delay / 10) : 0}ms; transition-property: background-color, border, color; background-color: {rowLetterColors[rowIndex][boxIndex]}; border-color: {rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length ? rowLetterColors[rowIndex][boxIndex] : '#d3d6da'}; color: {rowLetterColors[rowIndex][boxIndex] !== '' ? 'white' : 'black'}; animation-delay: {boxIndex * (delay / 10)}ms;"
+            class="box {rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length ? 'filled' : ''} {isFlipped && rowTexts[rowIndex] && rowIndex == currentRow && boxIndex < rowTexts[rowIndex].length ? 'flipping' : ''} {nowQuestionMark && rowIndex == currentRow - 1 ? "celeb" : ""}" 
+            style="transition-delay: {animDelay ? (boxIndex * (delay / 10) + delay / 10) : 0}ms; transition-property: background-color, border, color; background-color: {rowLetterColors[rowIndex][boxIndex]}; border-color: {rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length ? rowLetterColors[rowIndex][boxIndex] : '#d3d6da'}; color: {rowLetterColors[rowIndex][boxIndex] !== '' ? 'white' : 'black'}; animation-delay: {!nowQuestionMark ? boxIndex * (delay / 10) : boxIndex * (delay / 50)}ms;"
           >
             {#if rowTexts[rowIndex] && boxIndex < rowTexts[rowIndex].length}
               {rowTexts[rowIndex][boxIndex].toUpperCase()}
@@ -259,26 +344,27 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
       </div>
     {/each}
   </div>
-</div> 
 
-<div id="keyboard-cont">
-  <div class="first-row">
-    {#each firstRowLetters as lett}
-      <button class="keyboard-button {firstRowLetters.indexOf(lett) == firstRowLetters.length - 1 ? "last" : ""}" style="background-color:{wordObj[lett]}; transition-delay: {offsetDelay}ms; transition-property: color, background-color; color: {wordObj[lett] !== '#d3d6da' ? 'white' : 'black'};" on:click={() => handleButtonClick(lett)}>{lett}</button>
-    {/each}
+  <div id="keyboard-cont">
+    <div class="first-row">
+      {#each firstRowLetters as lett}
+        <button class="keyboard-button {firstRowLetters.indexOf(lett) == firstRowLetters.length - 1 ? "last" : ""}" style="background-color:{wordObj[lett]}; transition-delay: {offsetDelay}ms; transition-property: color, background-color; color: {wordObj[lett] !== '#d3d6da' ? 'white' : 'black'};" on:click={() => handleButtonClick(lett)}>{lett}</button>
+      {/each}
+    </div>
+
+    <div class="second-row">
+      {#each secondRowLetters as lett}
+        <button class="keyboard-button {secondRowLetters.indexOf(lett) == secondRowLetters.length - 1 ? "last" : ""}" style="background-color:{wordObj[lett]}; transition-delay: {offsetDelay}ms; transition-property: color, background-color; color: {wordObj[lett] !== '#d3d6da' ? 'white' : 'black'};" on:click={() => handleButtonClick(lett)}>{lett}</button>
+      {/each}
+    </div>
+
+    <div class="third-row">
+      <button class="keyboard-button enter" on:click={() => handleButtonClick("Enter")}>Enter</button>
+      {#each thirdRowLetters as lett}
+        <button class="keyboard-button" style="background-color:{wordObj[lett]}; transition-delay: {offsetDelay}ms; transition-property: color, background-color; color: {wordObj[lett] !== '#d3d6da' ? 'white' : 'black'};" on:click={() => handleButtonClick(lett)}>{lett}</button>
+      {/each}
+      <button class="keyboard-button enter last" on:click={() => handleButtonClick('Backspace')}><svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></svg></button>
+    </div>
   </div>
 
-  <div class="second-row">
-    {#each secondRowLetters as lett}
-      <button class="keyboard-button {secondRowLetters.indexOf(lett) == secondRowLetters.length - 1 ? "last" : ""}" style="background-color:{wordObj[lett]}; transition-delay: {offsetDelay}ms; transition-property: color, background-color; color: {wordObj[lett] !== '#d3d6da' ? 'white' : 'black'};" on:click={() => handleButtonClick(lett)}>{lett}</button>
-    {/each}
-  </div>
-
-  <div class="third-row">
-    <button class="keyboard-button enter" on:click={() => handleButtonClick("Enter")}>Enter</button>
-    {#each thirdRowLetters as lett}
-      <button class="keyboard-button" style="background-color:{wordObj[lett]}; transition-delay: {offsetDelay}ms; transition-property: color, background-color; color: {wordObj[lett] !== '#d3d6da' ? 'white' : 'black'};" on:click={() => handleButtonClick(lett)}>{lett}</button>
-    {/each}
-    <button class="keyboard-button enter last" on:click={() => handleButtonClick('Backspace')}><svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></svg></button>
-  </div>
 </div>
