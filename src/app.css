@@ -70,7 +70,21 @@
 
 .filled {
   border: 2px solid #878a8c;
+  animation: fill 100ms ease-in-out;
 }
+
+@keyframes fill {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 
 @keyframes flip {
   0% {
