@@ -72,7 +72,7 @@ const betterWords = ["HADDE","ETTER","ELLER","DETTE","KUNNE","ANDRE","HENNE","DE
   Å: "#d3d6da"
 };
 
-  const offsetFromDate = new Date(Date.UTC(2023, 6, 27, 0, 0, 0, 0) + (2 + 60 * 60 * 1000));
+  const offsetFromDate = new Date(Date.UTC(2025, 6, 27, 0, 0, 0, 0) + (2 + 60 * 60 * 1000));
   const msOffset = Date.now() - offsetFromDate;
   const dayOffset = msOffset / 1000 / 60 / 60 / 24;
   let correctWord = betterWords[Math.floor(dayOffset)]
